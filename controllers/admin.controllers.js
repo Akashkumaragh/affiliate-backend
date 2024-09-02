@@ -218,7 +218,7 @@ exports.declineUserRequest = async (req, res) => {
   }
 };
 
-/* api/agents?page=2&limit=15&status=Approved */
+/* api/admin/users?page=2&limit=15&status=Approved */
 exports.getUsers = async (req, res) => {
   try {
     console.log("req.query", req.query);

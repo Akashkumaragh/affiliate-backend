@@ -10,7 +10,7 @@ const {
 
 const router = express.Router();
 
-// Note:- add authentication middlewares => auth and isAdmin letter
+// Note:- add authentication middlewares letter => auth and isAdmin
 
 router.post("/login", adminLogin);
 router.post("/signup", adminSignup);

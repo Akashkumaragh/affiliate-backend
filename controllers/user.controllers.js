@@ -5,7 +5,6 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const sendEmail = require("../utils/mailSender");
-const { uploadToWasabi } = require("../utils/wasabiUpload");
 const OTP = require("../models/otp.model");
 
 // Affiliate User Register
