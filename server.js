@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const fileUpload = require("express-fileupload");
 const userRoutes = require("./routes/user.route");
-const adminRoutes = require("./routes/admin.route");
+const adminRoutes = require("./routes/admin.route.js");
 const { connectToDB } = require("./config/database");
 
 require("dotenv").config();
