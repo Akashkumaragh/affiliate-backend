@@ -1,6 +1,6 @@
 // backend/config/wasabi.js
 const AWS = require("aws-sdk");
-
+require("dotenv").config();
 const s3 = new AWS.S3({
   accessKeyId: process.env.WASABI_ACCESS_KEY,
   secretAccessKey: process.env.WASABI_SECRET_KEY,

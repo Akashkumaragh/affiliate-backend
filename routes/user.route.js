@@ -7,8 +7,9 @@ const {
   getProfile,
   generateResetPasswordLink,
   changePassword,
+  getUserProfile,
 } = require("../controllers/user.controllers");
-const {auth} = require("../middlewares/auth")
+const { auth } = require("../middlewares/auth");
 
 const router = express.Router();
 
@@ -18,5 +19,6 @@ router.post("/set-password/:token", setPassword);
 router.get("/profile", getProfile);
 router.post("/forget-password", generateResetPasswordLink);
 router.post("/change-password", auth, changePassword);
+router.get("/profile/:id", getUserProfile);
 
 module.exports = router;

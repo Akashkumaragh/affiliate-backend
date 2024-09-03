@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const sendEmail = require("../utils/mailSender");
 const OTP = require("../models/otp.model");
+const { v4: uuidv4 } = require("uuid");
 
 // Affiliate User Register
 
@@ -44,32 +45,36 @@ exports.userSignup = async (req, res) => {
       });
     }
 
-    const dbOtp = await OTP.find({
-      email: email,
-    })
-      .sort({ createdAt: -1 })
-      .limit(1);
-    console.log("dbOtp", dbOtp);
-    if (dbOtp.length == 0) {
-      return res.status(404).json({
-        success: false,
-        message: "Could'nt find otp",
-      });
-    }
-    if (dbOtp[0].otp !== otp) {
-      return res.status(400).json({
-        success: false,
-        message: "Please enter valid otp",
-      });
-    }
+    // const dbOtp = await OTP.find({
+    //   email: email,
+    // })
+    //   .sort({ createdAt: -1 })
+    //   .limit(1);
+    // console.log("dbOtp", dbOtp);
+    // if (dbOtp.length == 0) {
+    //   return res.status(404).json({
+    //     success: false,
+    //     message: "Could'nt find otp",
+    //   });
+    // }
+    // if (dbOtp[0].otp !== otp) {
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: "Please enter valid otp",
+    //   });
+    // }
 
     const document = req.files.document;
     console.log("Document details:", document);
 
     // Upload document to Wasabi
     let documentUrl;
+    let documentType;
+    let documentId;
     try {
-      documentUrl = await uploadToWasabi(document);
+      documentId = uuidv4();
+      documentUrl = await uploadToWasabi(document, documentId);
+      documentType = document.mimetype;
     } catch (uploadError) {
       return res.status(500).json({
         message: "Error uploading document",
@@ -84,7 +89,11 @@ exports.userSignup = async (req, res) => {
       countryCode,
       mobileNumber: Number(mobile),
       occupation,
-      documentUrl,
+      document: {
+        id: documentId,
+        url: documentUrl,
+        type: documentType,
+      },
     });
     return res.status(201).json({
       success: true,
@@ -360,5 +369,20 @@ exports.changePassword = async (req, res) => {
       success: false,
       message: "An error occurred while changing the password",
     });
+  }
+};
+
+exports.getUserProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };

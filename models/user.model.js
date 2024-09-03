@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    countryCode: { type: String, required: true },
     password: {
       type: String,
       trim: true,
@@ -25,7 +26,7 @@ const userSchema = new mongoose.Schema(
     resetPasswordExpires: {
       type: Date,
     },
-    mobile: {
+    mobileNumber: {
       type: Number,
       required: true,
     },
@@ -33,9 +34,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    documentUrl: {
-      type: String,
-      required: true,
+    document: {
+      id: { type: String, required: true },
+      url: { type: String, required: true },
+      type: { type: String, required: true },
     },
     approvalStatus: {
       type: String,
@@ -43,10 +45,11 @@ const userSchema = new mongoose.Schema(
       default: "Pending",
     },
     accountType: {
-     type:String,
-     enum:["User"],
-     default:"User"
-    }
+      type: String,
+      enum: ["User"],
+      default: "User",
+    },
+    rejectionReason: { type: String },
   },
   { timestamps: true }
 );

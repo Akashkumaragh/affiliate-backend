@@ -16,13 +16,7 @@ app.use(
 );
 
 app.use(express.json());
-app.use(
-  fileUpload({
-    limits: { fileSize: 5 * 1024 * 1024 }, //5mb
-    useTempFiles: true,
-    tempFileDir: "/tmp/",
-  })
-);
+app.use(fileUpload());
 
 app.use("/api/user", userRoutes);
 app.use("/api/admin", adminRoutes);
