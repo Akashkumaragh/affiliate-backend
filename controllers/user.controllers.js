@@ -45,24 +45,24 @@ exports.userSignup = async (req, res) => {
       });
     }
 
-    // const dbOtp = await OTP.find({
-    //   email: email,
-    // })
-    //   .sort({ createdAt: -1 })
-    //   .limit(1);
-    // console.log("dbOtp", dbOtp);
-    // if (dbOtp.length == 0) {
-    //   return res.status(404).json({
-    //     success: false,
-    //     message: "Could'nt find otp",
-    //   });
-    // }
-    // if (dbOtp[0].otp !== otp) {
-    //   return res.status(400).json({
-    //     success: false,
-    //     message: "Please enter valid otp",
-    //   });
-    // }
+    const dbOtp = await OTP.find({
+      email: email,
+    })
+      .sort({ createdAt: -1 })
+      .limit(1);
+    console.log("dbOtp", dbOtp);
+    if (dbOtp.length == 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Could'nt find otp",
+      });
+    }
+    if (dbOtp[0].otp !== otp) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter valid otp",
+      });
+    }
 
     const document = req.files.document;
     console.log("Document details:", document);
