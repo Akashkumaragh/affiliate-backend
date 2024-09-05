@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const sendEmail = require("../utils/mailSender");
 const OTP = require("../models/otp.model");
+const { v4: uuidv4 } = require("uuid");
 
 // Affiliate User Register
 
@@ -68,8 +69,12 @@ exports.userSignup = async (req, res) => {
 
     // Upload document to Wasabi
     let documentUrl;
+    let documentType;
+    let documentId;
     try {
-      documentUrl = await uploadToWasabi(document);
+      documentId = uuidv4();
+      documentUrl = await uploadToWasabi(document, documentId);
+      documentType = document.mimetype;
     } catch (uploadError) {
       return res.status(500).json({
         message: "Error uploading document",
@@ -84,7 +89,11 @@ exports.userSignup = async (req, res) => {
       countryCode,
       mobileNumber: Number(mobile),
       occupation,
-      documentUrl,
+      document: {
+        id: documentId,
+        url: documentUrl,
+        type: documentType,
+      },
     });
     return res.status(201).json({
       success: true,
@@ -360,5 +369,20 @@ exports.changePassword = async (req, res) => {
       success: false,
       message: "An error occurred while changing the password",
     });
+  }
+};
+
+exports.getUserProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
